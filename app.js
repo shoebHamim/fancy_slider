@@ -2,6 +2,7 @@ const imagesArea = document.querySelector('.images');
 const gallery = document.querySelector('.gallery');
 const galleryHeader = document.querySelector('.gallery-header');
 const searchBtn = document.getElementById('search-btn');
+const search = document.getElementById('search');
 const sliderBtn = document.getElementById('create-slider');
 const sliderContainer = document.getElementById('sliders');
 // selected image 
@@ -39,7 +40,7 @@ let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
   element.classList.add('added');
- 
+
   let item = sliders.indexOf(img);
   if (item === -1) {
     sliders.push(img);
@@ -66,8 +67,13 @@ const createSlider = () => {
   sliderContainer.appendChild(prevNext)
   document.querySelector('.main').style.display = 'block';
   // hide image aria
-  imagesArea.style.display = 'none';
+
   const duration = document.getElementById('duration').value || 1000;
+  if (duration < 0) {
+    alert('Duration can not be negative!');
+    return;
+  }
+  imagesArea.style.display = 'none';
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
@@ -115,6 +121,16 @@ searchBtn.addEventListener('click', function () {
   const search = document.getElementById('search');
   getImages(search.value)
   sliders.length = 0;
+})
+
+search.addEventListener('keyup', function (event) {
+  if (event.keyCode === 13) {
+    document.querySelector('.main').style.display = 'none';
+    clearInterval(timer);
+    const search = document.getElementById('search');
+    getImages(search.value)
+    sliders.length = 0;
+  }
 })
 
 sliderBtn.addEventListener('click', function () {
